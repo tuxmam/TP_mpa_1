@@ -1,8 +1,8 @@
 ---
 title: "R Notebook"
 output:
-  pdf_document: default
   html_notebook: default
+  pdf_document: default
 ---
 Question 1
 
@@ -10,12 +10,30 @@ $p(y |\theta) = \frac{1}{\sqrt{2*2*\pi}}exp(-\frac{1}{4}(y-\frac{\theta}{4})^2$
 
 $p(\theta) = \frac{1}{8\sqrt{\pi}}exp(-\frac{\theta^2}{64})$
 
+---
+
+Question 2
+
 $p(\theta | y) = \frac{1}{\sqrt{16*2*\pi}}exp(-\frac{1}{32}(\theta-2y)^2$
 
 $p(y) = \frac{1}{\sqrt{8\pi}}exp(-\frac{y^2}{8})$
 
+---
+Question 3
+
 ```{r}
-plot(cars)
+# calcul de p(\theta) par rejet:
+while (1) {
+    theta = runif(n = 1, min = 0, max = 1)
+    x = runif(n = 1, min = 0, max = 1)
+    if (x < 1/(8*3.14)*exp(-theta^2/64))
+        {
+          break
+        }
+}
+# simulation de p(y |\theta)
+res = rnorm(1, mean = theta/4, sd = sqrt(2))
+print(res)
 ```
 
 Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
