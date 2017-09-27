@@ -46,6 +46,7 @@ Question 5
 ```{r}
 # calcul de p(\theta) par rejet:
 resultats = c()
+thetas = c()
 for(i in 1:1000)
 {
   while (1) {
@@ -56,8 +57,9 @@ for(i in 1:1000)
   }
   res = rnorm(1, mean = theta/4, sd = sqrt(2))*theta
   resultats = c(resultats, res)
+  thetas = c(thetas, theta)
 }
-plot(resultats)
+plot(resultats, thetas)
 hist(resultats)
 ```
 
