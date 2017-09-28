@@ -22,30 +22,8 @@ $p(y) = \frac{1}{\sqrt{8\pi}}exp(-\frac{y^2}{8})$
 Question 3
 
 ```{r}
-# calcul de p(\theta) par rejet:
-while (1) {
-    theta = runif(n = 1, min = 0, max = 1)
-    x = runif(n = 1, min = 0, max = 1)
-    if (x < 1/(8*sqrt(3.14))*exp(-theta^2/64))
-        {
-          break
-        }
-}
-# simulation de p(y |\theta)
-res = rnorm(1, mean = theta/4, sd = sqrt(2))*theta
-print(res)
-
-# calcul de p(y) par rejet:
-while (1) {
-    y = runif(n = 1, min = 0, max = 1)
-    x = runif(n = 1, min = 0, max = 1)
-    if (x < 1/sqrt(8*3.14)*exp(-y^2/8))
-        {
-          break
-        }
-}
-# simulation de p(\theta |y)
-res = rnorm(1, mean = 2*y, sd = 4)*theta
+y = rnorm(1, mean = 0, sd = 2)
+res = rnorm(1, mean = 2*y, sd = 4)
 print(res)
 
 
@@ -55,52 +33,34 @@ print(res)
 Question 4
 
 
-
 ---
-Question 5
+Question 5 et 6
+
 ```{r}
-# calcul de p(\theta) par rejet:
-resultats = c()
-thetas = c()
-for(i in 1:1000)
-{
-  while (1) {
-    theta = runif(n = 1, min = 0, max = 1)
-    x = runif(n = 1, min = 0, max = 1)
-    if (x < 1/(8*sqrt(3.14))*exp(-theta^2/64))
-          break
-  }
-  res = rnorm(1, mean = theta/4, sd = sqrt(2))*theta
-  resultats = c(resultats, res)
-  thetas = c(thetas, theta)
-}
-plot(sort(resultats))
-hist(resultats)
-```
-autre version
-```{r}
-# calcul de p(\theta) par rejet:
 resultats = c()
 ys = c()
 for(i in 1:1000)
 {
-
-  while (1) {
-      y = runif(n = 1, min = 0, max = 1)
-      x = runif(n = 1, min = 0, max = 1)
-      if (x < 1/sqrt(8*3.14)*exp(-y^2/8))
-            break
-}
-  res = rnorm(1, mean = 2*y, sd = 4)*y
+  y = rnorm(1, mean = 0, sd = 2)
+  res = rnorm(1, mean = 2*y, sd = 4)
   resultats = c(resultats, res)
   ys = c(ys, y)
 }
-plot(ys, resultats)
 hist(resultats)
+plot(ys, resultats, col = "grey")
 
-# question 6
+
+# question 5
 x = seq(0,1, length.out = 10)
 y = x*2
-plot(x,y, )
+lines(x,y, col="blue", type="b")
+
+
+# question 6 regression linéaire
+reg <- lm(resultats~ys)
+abline(reg)
+print(reg$coefficients[1])
+print(reg$coefficients[2])
+
 ```
 
