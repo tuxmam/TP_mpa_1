@@ -26,7 +26,7 @@ Question 3
 while (1) {
     theta = runif(n = 1, min = 0, max = 1)
     x = runif(n = 1, min = 0, max = 1)
-    if (x < 1/(8*3.14)*exp(-theta^2/64))
+    if (x < 1/(8*sqrt(3.14))*exp(-theta^2/64))
         {
           break
         }
@@ -34,6 +34,21 @@ while (1) {
 # simulation de p(y |\theta)
 res = rnorm(1, mean = theta/4, sd = sqrt(2))*theta
 print(res)
+
+# calcul de p(y) par rejet:
+while (1) {
+    y = runif(n = 1, min = 0, max = 1)
+    x = runif(n = 1, min = 0, max = 1)
+    if (x < 1/sqrt(8*3.14)*exp(-y^2/8))
+        {
+          break
+        }
+}
+# simulation de p(\theta |y)
+res = rnorm(1, mean = 2*y, sd = 4)*theta
+print(res)
+
+
 ```
 
 ---
@@ -52,14 +67,40 @@ for(i in 1:1000)
   while (1) {
     theta = runif(n = 1, min = 0, max = 1)
     x = runif(n = 1, min = 0, max = 1)
-    if (x < 1/(8*3.14)*exp(-theta^2/64))
+    if (x < 1/(8*sqrt(3.14))*exp(-theta^2/64))
           break
   }
   res = rnorm(1, mean = theta/4, sd = sqrt(2))*theta
   resultats = c(resultats, res)
   thetas = c(thetas, theta)
 }
-plot(resultats, thetas)
+plot(sort(resultats))
 hist(resultats)
+```
+autre version
+```{r}
+# calcul de p(\theta) par rejet:
+resultats = c()
+ys = c()
+for(i in 1:1000)
+{
+
+  while (1) {
+      y = runif(n = 1, min = 0, max = 1)
+      x = runif(n = 1, min = 0, max = 1)
+      if (x < 1/sqrt(8*3.14)*exp(-y^2/8))
+            break
+}
+  res = rnorm(1, mean = 2*y, sd = 4)*y
+  resultats = c(resultats, res)
+  ys = c(ys, y)
+}
+plot(ys, resultats)
+hist(resultats)
+
+# question 6
+x = seq(0,1, length.out = 10)
+y = x*2
+plot(x,y, )
 ```
 
