@@ -8,7 +8,7 @@ Question 1
 
 $p(y |\theta) = \frac{1}{\sqrt{2*2*\pi}}exp(-\frac{1}{4}(y-\frac{\theta}{4})^2$
 
-$p(\theta) = \frac{1}{8\sqrt{\pi}}exp(-\frac{\theta^2}{64})$
+$p(\theta) = \frac{1}{\sqrt{2*32\pi}}exp(-\frac{\theta^2}{64})$
 
 ---
 
@@ -16,7 +16,7 @@ Question 2
 
 $p(\theta | y) = \frac{1}{\sqrt{16*2*\pi}}exp(-\frac{1}{32}(\theta-2y)^2$
 
-$p(y) = \frac{1}{\sqrt{8\pi}}exp(-\frac{y^2}{8})$
+$p(y) = \frac{1}{\sqrt{2*4\pi}}exp(-\frac{y^2}{8})$
 
 ---
 Question 3
@@ -37,30 +37,35 @@ Question 4
 Question 5 et 6
 
 ```{r}
-resultats = c()
-ys = c()
-for(i in 1:1000)
-{
-  y = rnorm(1, mean = 0, sd = 2)
-  res = rnorm(1, mean = 2*y, sd = 4)
-  resultats = c(resultats, res)
-  ys = c(ys, y)
-}
-hist(resultats)
-plot(ys, resultats, col = "grey")
+y = rnorm(1000, mean = 0, sd = 2)
+theta = rnorm(1000, mean = 2*y, sd = 4)
+
+plot(y, theta, col = "grey")
 
 
 # question 5
-x = seq(0,1, length.out = 10)
-y = x*2
-lines(x,y, col="blue", type="b")
+x = seq(-20,20, length.out = 10)
+lines(x,2*x, col="blue", type="b")
 
 
 # question 6 regression linéaire
-reg <- lm(resultats~ys)
+reg <- lm(theta~y)
 abline(reg)
 print(reg$coefficients[1])
 print(reg$coefficients[2])
 
+```
+Question 7
+
+```{r}
+theta = rnorm(100000, mean = 0, sd = sqrt(32))
+y = rnorm(100000, mean = theta/4, sd = sqrt(32))
+
+theta = theta[y > 1.99 & y < 2.01]
+y = y[y > 1.99 & y < 2.01]
+plot(y, theta)
+hist(theta)
+hist(y)
+print(mean(theta))
 ```
 
