@@ -3,76 +3,110 @@ title: "R Notebook"
 output:
   html_notebook: default
   pdf_document: default
----
-Question 1
-
-$p(y |\theta) = \frac{1}{\sqrt{2*2*\pi}}exp(-\frac{1}{4}(y-\frac{\theta}{4})^2$
-
-$p(\theta) = \frac{1}{\sqrt{2*32\pi}}exp(-\frac{\theta^2}{64})$
-
+  
 ---
 
-Question 2
+### Question 1
 
-$p(\theta | y) = \frac{1}{\sqrt{16*2*\pi}}exp(-\frac{1}{32}(\theta-2y)^2$
+On a : $p(y,\theta) = \frac{1}{16\pi}exp(-\frac{1}{32}(8y^2-4*y\theta + \theta^2))$
 
-$p(y) = \frac{1}{\sqrt{2*4\pi}}exp(-\frac{y^2}{8})$
+Or $p(y,\theta) = p(y|\theta)p(\theta)$
+
+On remarque que $\frac{1}{16\pi}exp(-\frac{1}{32}(8y^2-4*y\theta + \theta^2)) = \left[\frac{1}{\sqrt{2*2*\pi}}exp(-\frac{1}{4}(y-\frac{\theta}{4})^2\right]*\left[\frac{1}{\sqrt{2*32\pi}}exp(-\frac{\theta^2}{64})\right]$
+
+Où le membre de droite et independant de y et les deux membres sont des densité de probabilité de loi normale.
+
+Finalement en identifiant on a : 
+
+$p(y |\theta) = \frac{1}{\sqrt{2*2*\pi}}exp(-\frac{1}{4}(y-\frac{\theta}{4})^2 = N(\frac{\theta}{4},\sqrt{2})$
+
+$p(\theta) = \frac{1}{\sqrt{2*32\pi}}exp(-\frac{\theta^2}{64}) = N(0,\sqrt{32})$
+
 
 ---
-Question 3
+
+### Question 2
+
+De la même manière qu'a la question 1 on remarque que $p(y,\theta) = p(\theta|y)p(y) =  \left[\frac{1}{\sqrt{16*2*\pi}}exp(-\frac{1}{32}(\theta-2y)^2\right] * \left[p(y) = \frac{1}{\sqrt{2*4\pi}}exp(-\frac{y^2}{8})\right]$
+
+
+On obtien également deux membre ayant pour densité une loi normale.
+
+On à finalement
+
+$p(\theta | y) = \frac{1}{\sqrt{16*2*\pi}}exp(-\frac{1}{32}(\theta-2y)^2 = N(2y,\sqrt{16})$
+
+$p(y) = \frac{1}{\sqrt{2*4\pi}}exp(-\frac{y^2}{8}) = N(0,\sqrt{4})$
+
+---
+
+### Question 3
+
+On a $p(y) = \frac{1}{\sqrt{2*4\pi}}exp(-\frac{y^2}{8})$ et $p(\theta | y) = \frac{1}{\sqrt{16*2*\pi}}exp(-\frac{1}{32}(\theta-2y)^2$
+
+Pour simuler le couple, il sufit donc de simuler deux loi normale. Celle de y, puis celle de $\theta$ sachant y
 
 ```{r}
 y = rnorm(1, mean = 0, sd = 2)
-res = rnorm(1, mean = 2*y, sd = 4)
-print(res)
-
-
+theta = rnorm(1, mean = 2*y, sd = 4)
 ```
 
----
-Question 4
 
+### Question 4
+
+$p(\theta | y)$ est la densité d'une loi normale de moyenne 2y. 
+
+On a donc E($\theta$|y)=2y
 
 ---
-Question 5 et 6
+### Question 5 et 6
 
 ```{r}
+# On simule les 1000 tirage
 y = rnorm(1000, mean = 0, sd = 2)
 theta = rnorm(1000, mean = 2*y, sd = 4)
 
-plot(y, theta, col = "grey")
+# On trace le nuage de point
+plot(y, theta, col = "grey", main = "Repartion de 1000 tirage pour la loi de densité p(y,theta)")
 
-
-# question 5
+# On ajoute la droite representant E[y|theta]
 x = seq(-20,20, length.out = 10)
 abline(0,2, col="blue")
 
 
-# question 6 regression linéaire
+# On ajoute la droite de régression lineaire
 reg <- lm(theta~y)
 abline(reg, col="orange")
-print(reg$coefficients[1])
-print(reg$coefficients[2])
 
+legend("topleft", legend=c("point",  "E[y|theta]", "regression")) 
 ```
-Question 7
+### Question 7
 
 ```{r}
 theta = rnorm(100000, mean = 0, sd = sqrt(32))
-y = rnorm(100000, mean = theta/4, sd = sqrt(32))
+y = rnorm(100000, mean = theta/4, sd = sqrt(2))
 
 theta = theta[y > 1.99 & y < 2.01]
 y = y[y > 1.99 & y < 2.01]
 plot(y, theta)
-hist(theta)
-hist(y)
+hist(theta, proba = TRUE)
+
+x_theo = seq(-10, 14,length.out =  100)
+y_theo = dnorm(x_theo, 4, 4)
+lines(x_theo, y_theo, col = "green")
 print(mean(theta))
 ```
-Question 9
 
-i
+L'histograme que l'on obtien est très proche de celui qu'on pourais attendre d'une loi normale de parametre (4, 4). 
 
-Question 10
+Ce résultat peut être expliquer par le fait que bloquer y dans un interval très petit reviens a fixer sa valeur a 2. On obtiens donc la loi de p($\theta$| y=2) qui est effectivement une loi normale de parametres 4 et 4.
+
+
+### Question 9
+
+
+
+### Question 10
 ```{r}
 theta_t = 10
 theta = c()
