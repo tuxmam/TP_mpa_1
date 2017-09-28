@@ -45,12 +45,12 @@ plot(y, theta, col = "grey")
 
 # question 5
 x = seq(-20,20, length.out = 10)
-lines(x,2*x, col="blue", type="b")
+abline(0,2, col="blue")
 
 
 # question 6 regression linéaire
 reg <- lm(theta~y)
-abline(reg)
+abline(reg, col="orange")
 print(reg$coefficients[1])
 print(reg$coefficients[2])
 
@@ -67,5 +67,24 @@ plot(y, theta)
 hist(theta)
 hist(y)
 print(mean(theta))
+```
+Question 9
+
+i
+
+Question 10
+```{r}
+theta_t = 10
+theta = c()
+y = c()
+for (i in 1:1010){
+  y_t = rnorm(1, theta_t/4, sqrt(2))
+  theta_t = rnorm(1, 2*y_t, sqrt(16))
+  y = c(y, y_t)
+  theta = c(theta, theta_t)
+}
+theta = theta[10:1010]
+y = y[10:1010]
+plot(y, theta)
 ```
 
