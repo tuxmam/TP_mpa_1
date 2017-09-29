@@ -61,6 +61,10 @@ On a donc E($\theta$|y)=2y
 ---
 ### Question 5 et 6
 
+Pour simuler les 1000 tirages il suffit d'appliquer la même methode qu'à la question 3
+
+En tracant la régression linéaire des y en fonction de theta on se rend compte que celle ci est très proche de la courbe théorique E[y|$\theta$]. La simulation est donc corecte.
+
 ```{r}
 # On simule les 1000 tirage
 y = rnorm(1000, mean = 0, sd = 2)
@@ -68,6 +72,7 @@ theta = rnorm(1000, mean = 2*y, sd = 4)
 
 # On trace le nuage de point
 plot(y, theta, col = "grey", main = "Repartion de 1000 tirage pour la loi de densité p(y,theta)")
+
 
 # On ajoute la droite representant E[y|theta]
 x = seq(-20,20, length.out = 10)
@@ -77,8 +82,8 @@ abline(0,2, col="blue")
 # On ajoute la droite de régression lineaire
 reg <- lm(theta~y)
 abline(reg, col="orange")
+legend("topleft", legend=c("E[y|theta]", "regression"), col = c("blue", "orange"), lty = c(1,1))
 
-legend("topleft", legend=c("point",  "E[y|theta]", "regression")) 
 ```
 ### Question 7
 
@@ -88,13 +93,13 @@ y = rnorm(100000, mean = theta/4, sd = sqrt(2))
 
 theta = theta[y > 1.99 & y < 2.01]
 y = y[y > 1.99 & y < 2.01]
-plot(y, theta)
-hist(theta, proba = TRUE)
+hist(theta, proba = TRUE, main="Histograme des valeurs de theta pour 1.99<y<2.01")
 
-x_theo = seq(-10, 14,length.out =  100)
+x_theo = seq(-6, 14,length.out =  100)
 y_theo = dnorm(x_theo, 4, 4)
-lines(x_theo, y_theo, col = "green")
-print(mean(theta))
+lines(x_theo, y_theo, col = "blue")
+
+legend("topleft", legend = "Densité de N(4,4)", col = "blue", lty = c(1,1))
 ```
 
 L'histograme que l'on obtien est très proche de celui qu'on pourais attendre d'une loi normale de parametre (4, 4). 
@@ -107,8 +112,9 @@ Ce résultat peut être expliquer par le fait que bloquer y dans un interval tr�
 
 
 ### Question 10
+
 ```{r}
-theta_t = 10
+theta_t = 0
 theta = c()
 y = c()
 for (i in 1:1010){
@@ -120,5 +126,42 @@ for (i in 1:1010){
 theta = theta[10:1010]
 y = y[10:1010]
 plot(y, theta)
+
+
+# On ajoute la droite representant E[y|theta]
+x = seq(-20,20, length.out = 10)
+abline(0,2, col="blue")
+# On ajoute la droite de régression lineaire
+reg <- lm(theta~y)
+abline(reg, col="orange")
+legend("topleft", legend=c("E[y|theta]", "regression"), col = c("blue", "orange"), lty = c(1,1))
+
+
+```
+En tracant la régression linéaire on se rend compte que la simulation est très performante même si l'on se contente de rejeter seulement les 10 premières valeurs. Le resultat est donc très vite stable.
+
+Meme si l'on prend un $\theta_0$ = 100 et on ne rejette pas de valeurs, les résultas de la simulations restent corects. On voit que les couples simulés convergent vite vers des valeurs cohérentes.
+```{r}
+theta_t = 100
+theta = c()
+y = c()
+for (i in 1:1000){
+  y_t = rnorm(1, theta_t/4, sqrt(2))
+  theta_t = rnorm(1, 2*y_t, sqrt(16))
+  y = c(y, y_t)
+  theta = c(theta, theta_t)
+}
+theta = theta[1:1000]
+y = y[1:1000]
+plot(y, theta)
+
+
+# On ajoute la droite representant E[y|theta]
+x = seq(-20,20, length.out = 10)
+abline(0,2, col="blue")
+# On ajoute la droite de régression lineaire
+reg <- lm(theta~y)
+abline(reg, col="orange")
+legend("topleft", legend=c("E[y|theta]", "regression"), col = c("blue", "orange"), lty = c(1,1))
 ```
 
