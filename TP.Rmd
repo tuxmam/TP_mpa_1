@@ -71,7 +71,7 @@ plot(y, theta, col = "grey", main = "Repartion de 1000 tirage pour la loi de den
 
 # On ajoute la droite representant E[y|theta]
 x = seq(-20,20, length.out = 10)
-abline(0,2, col="blue")E[y|theta]
+abline(0,2, col="blue")
 
 
 # On ajoute la droite de régression lineaire
